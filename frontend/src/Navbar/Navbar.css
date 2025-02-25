@@ -1,0 +1,197 @@
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar Container */
+.navbar {
+    background-color: #ffffff;
+    width: 100%;
+    border-bottom: 1px solid rgba(143, 143, 143, 0.368);
+}
+
+.navbar-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* Logo */
+.logo img {
+    height: 35px;
+}
+
+/* Nav Links */
+.nav-links {
+    position: absolute;
+    top: 80px;
+    right: 1%;
+    width: 70%;
+    flex-direction: column;
+    gap: 5px;
+    display: none;
+    list-style-type: none;
+    padding: 0;
+    background-color: white;
+}
+
+/* When Toggle is Open */
+.nav-links.active {
+    display: flex;
+}
+
+.nav-links li {
+    border: 1px solid rgba(0, 0, 0, 0.219);
+    text-align: start;
+    width: 100%;
+    padding: 15px 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.242);
+}
+
+/* Nav Link Styling */
+.nav-links a {
+    position: relative;
+    text-decoration: none;
+    color: var(--primary-text-color);
+    font-size: 18px;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Animated Underline */
+.nav-links a::before {
+    content: "";
+    position: absolute;
+    width: 0; 
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-border);
+    transition: width 0.4s ease-in-out;
+}
+
+.nav-links a:hover::before {
+    width: 100%; 
+}
+
+/* Fix for Sign Up & Login Buttons */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Mobile View */
+@media screen and (max-width: 767px) {
+    .auth-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10px;
+    }
+}
+
+/* Tablet & Desktop View */
+@media screen and (min-width: 768px) {
+    .auth-buttons {
+        display: flex;
+        gap: 15px;
+    }
+}
+
+/* Styling the Buttons */
+.auth-buttons .btn {
+    padding: 8px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+/* Primary Button (Sign Up) */
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+/* Outline Button (Login) */
+.btn-outline-primary {
+    border: 2px solid #007bff;
+    color: #007bff;
+    background: none;
+}
+
+/* Hover Effects */
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Toggle Button for Mobile */
+.toggle-btn {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.toggle-btn .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 4px;
+}
+
+/* Tablet View */
+@media screen and (min-width: 768px) {
+    .navbar-container {
+        padding: 15px 30px;
+    }
+
+    /* Nav Links visible */
+    .nav-links {
+        position: relative;
+        top: 0px;
+        right: 0%;
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        list-style-type: none;
+        padding: 0;
+        margin: 0%;
+    }
+   
+    .nav-links li {
+        border: 0px;
+        text-align: start;
+        width: auto;
+        padding: 0px 0px;
+        box-shadow: none;
+    }
+    
+    .nav-links a {
+        font-size: 18px;   
+    }
+
+    .toggle-btn {
+        display: none;
+    }
+}
+
+/* Desktop View */
+@media screen and (min-width: 1024px) {
+    .nav-links {
+        display: flex;
+        gap: 40px;
+    }
+
+    .auth-buttons .btn {
+        padding: 8px 15px;
+    }
+}

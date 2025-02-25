@@ -1,0 +1,10 @@
+
+h1,
+h2,
+h3,
+p {
+    font-family: "Outfit", sans-serif;
+    color: var( --primary-text-color);
+}
+
+
