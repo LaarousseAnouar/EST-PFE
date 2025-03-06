@@ -16,8 +16,8 @@ function Contact() {
                     </div>
                     <div className="col-12 col-md-6 col-lg-3 contact-info">
                         <p>OUR OFFICE</p>
-                        <p>00000 Willms Station <br /> pune 000, pune, India</p>
-                        <p>Tel: (000) 000-0000 <br /> Email: rautonkar228@gmail.com</p>
+                        <p> FES, AIN CHKEF </p>
+                        <p>Tel: 05 10 11 12 13 <br /> Email: anouar.laarousse@usmba.ac.ma</p>
                         <p>CAREERS AT HOSPITAL</p>
                         <p>Learn more about our teams and job openings.</p>
                         <button>Explore Jobs</button>

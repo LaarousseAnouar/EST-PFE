@@ -33,12 +33,12 @@ const Login = () => {
         localStorage.setItem('userRole', data.role);
         localStorage.setItem('userEmail', email);
         // Redirect based on role
-        if (data.role === 'admin') {
-          navigate('/admin');
+        if (data.role === 'patient') {
+          navigate('/patient');
         } else if (data.role === 'doctor') {
           navigate('/doctor');
         } else {
-          navigate('/patient');
+          navigate('/admin');
         }
       } else {
         const errorData = await response.json();

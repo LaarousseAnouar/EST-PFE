@@ -22,14 +22,14 @@ function Footer() {
                     <div className='col-12 col-md-3 touch'>
                         <p class="text-xl font-medium mb-3">GET IN TOUCH</p>
                         <ul class="flex flex-col gap-2 p-0">
-                            <li>+0-000-000-000</li>
-                            <li>rautonkar228@gmail.com</li>
+                            <li>05 10 11 12 13</li>
+                            <li>anouar.laarousse@usmba.ac.ma</li>
                         </ul>
                     </div>
                 </div>
                 <div className="copyright">
                     <hr/>
-                    <p class="py-2 text-sm text-center">Copyright 2024 @ rautomkar - All Right Reserverd.
+                    <p class="py-2 text-sm text-center">Copyright 2025 @ anouar.laarousse - All Right Reserverd.
                     </p>
                 </div>
             </div>
