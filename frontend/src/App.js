@@ -41,8 +41,8 @@ function App() {
             <Route path='/signup' element={<SignUp />} />
             <Route path='/login' element={<Login />} />
             <Route path="/patient" element={<Patient />} />
-            <Route path="/doctors" element={<Doctors />} />
-            <Route path="/admins" element={<Admins />} />
+            <Route path="/doctor" element={<Doctors />} />
+            <Route path="/admin" element={<Admins />} />
 
           </Routes>
         </AppContextProvider>
