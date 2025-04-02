@@ -12,11 +12,11 @@ import AllDoctors from './AllDoctors/AllDoctors.js';
 import Contact from './Contact/Contact.js';
 
 // Importation des pages d'authentification
-import SignUp from './components/SignUp';
-import Login from './components/Login';
-import Patient from './components/Patient';
-import Doctors from './components/Doctors';
-import Admins from './components/Admins';
+import SignUp from './components/SignUp.js';
+import Login from './components/Login.js';
+import Patient from './components/Patient.js';
+import Doctors from './components/Doctors.js';
+import Admins from './components/Admins.js';
 
 // Importation du contexte de l'application
 import AppContextProvider from './Context/AppContext.js';

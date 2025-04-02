@@ -538,6 +538,7 @@ export default function PatientDashboard() {
           <Hospital className="h-6 w-6 text-dark" />
           <span className="font-bold text-xl">Hospital Management System</span>
         </div>
+        <br></br>
         <Button variant="outline" onClick={() => navigate('/')}>Sign Out</Button>
       </header>
       <nav className="bg-blue-700 text-dark p-4">
@@ -545,13 +546,15 @@ export default function PatientDashboard() {
           <li>
             <Button
               variant={activeTab === 'Dashboard' ? "outline" : "ghost"}
-              className={`hover:bg-light hover:text-dark ${activeTab === 'Dashboard' ? 'bg-light text-dark' : 'text-dark'}`}
+              className={`hover:bg-light hover:text-dark${activeTab === 'Dashboard' ? 'bg-light text-dark' : 'text-dark'}`}
               onClick={() => setActiveTab('Dashboard')}
             >
               <Home className="w-4 h-4 mr-2" />
               Dashboard
             </Button>
+            
           </li>
+          <br></br>
           <li>
             <Button
               variant={activeTab === 'Profile' ? "outline" : "ghost"}
@@ -562,6 +565,7 @@ export default function PatientDashboard() {
               Profile
             </Button>
           </li>
+          <br></br>
           <li>
             <Button
               variant={activeTab === 'Appointment Booking' ? "outline" : "ghost"}

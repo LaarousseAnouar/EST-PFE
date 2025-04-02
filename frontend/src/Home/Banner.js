@@ -13,7 +13,7 @@ function Banner () {
                             <p className='banner-title'>
                             Book Appointment With 100+ Trusted Doctors
                             </p>
-                            <a href='book-btn' className='rounded-pill'>
+                            <a href='SignUp' className='rounded-pill'>
                                 Create account
                             </a>
                         </div>
