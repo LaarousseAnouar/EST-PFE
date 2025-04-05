@@ -36,9 +36,9 @@ const Login = () => {
         if (data.role === 'patient') {
           navigate('/patient');
         } else if (data.role === 'doctor') {
-          navigate('/doctor');
+          navigate('../Doctors');
         } else {
-          navigate('/admin');
+          navigate('/Admins');
         }
       } else {
         const errorData = await response.json();

@@ -1,7 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Calendar as CalendarIcon, Eye, EyeOff, Hospital } from 'lucide-react';
+import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Calendar as CalendarIcon, Hospital } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { getSpecialtyFromReason } from '../utils/specialtyMapping';
+
 
 const Button = ({ children, variant = 'primary', className = '', ...props }) => (
   <button
@@ -67,6 +69,7 @@ const Select = ({ children, ...props }) => (
 );
 
 export default function PatientDashboard() {
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [showAppointments, setShowAppointments] = useState(false);
   const [showPrescriptions, setShowPrescriptions] = useState(false);
   const [activeTab, setActiveTab] = useState('Dashboard');
@@ -93,6 +96,17 @@ export default function PatientDashboard() {
     fetchCareTeam();
     fetchPrescriptions();
   }, []);
+
+  useEffect(() => {
+    const specialty = getSpecialtyFromReason(appointmentData.reason);
+    if (specialty) {
+      const recommended = doctors.filter(doc => doc.specialty === specialty);
+      setFilteredDoctors(recommended);
+    } else {
+      setFilteredDoctors(doctors);
+    }
+  }, [appointmentData.reason, doctors]);
+
 
   const fetchPatientProfile = async () => {
     try {
@@ -500,7 +514,7 @@ export default function PatientDashboard() {
               <Label htmlFor="doctorId">Select Doctor</Label>
               <Select id="doctorId" name="doctorId" value={appointmentData.doctorId} onChange={handleInputChange}>
                 <option value="">Choose a doctor</option>
-                {doctors.map((doctor) => (
+                {filteredDoctors.map((doctor) => (
                   <option key={doctor._id} value={doctor._id}>
                     Dr. {doctor.firstName} {doctor.lastName} - {doctor.specialty}
                   </option>
@@ -539,7 +553,7 @@ export default function PatientDashboard() {
           <span className="font-bold text-xl">Hospital Management System</span>
         </div>
         <br></br>
-        <Button variant="outline" onClick={() => navigate('/')}>Sign Out</Button>
+        <Button variant="outline" onClick={() => navigate('/Login.js')}>Sign Out</Button>
       </header>
       <nav className="bg-blue-700 text-dark p-4">
         <ul className="flex space-x-4 justify-center">
@@ -588,3 +602,4 @@ export default function PatientDashboard() {
     </div>
   );
 }
+
