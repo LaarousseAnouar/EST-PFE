@@ -10,11 +10,11 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch((err) => console.error(' Could not connect to MongoDB', err));
 
 async function createAdmin() {
-  const email = "abc@gmail.com"; // ✅ Email de l'admin
-  const password = "xyz123"; // ✅ Mot de passe temporaire
+  const email = "abc@gmail.com"; //  Email de l'admin
+  const password = "xyz123"; //  Mot de passe temporaire
 
   try {
-    // 🔥 Vérifier si l'admin existe déjà
+    //  Vérifier si l'admin existe déjà
     const existingAdmin = await User.findOne({ email });
     if (existingAdmin) {
       console.log("⚠ Admin already exists!");
@@ -22,19 +22,19 @@ async function createAdmin() {
       return;
     }
 
-    // 🔥 Créer un nouvel admin sans re-hacher le mot de passe
+    // Créer un nouvel admin sans re-hacher le mot de passe
     const admin = new User({
       firstName: "abc",
       lastName: "xyz",
       email,
-      password, // ✅ NE PAS hasher le mot de passe ici
+      password, //  NE PAS hasher le mot de passe ici
       role: "admin"
     });
 
     await admin.save();
-    console.log('✅ Admin created successfully');
+    console.log(' Admin created successfully');
   } catch (error) {
-    console.error('❌ Error creating admin:', error);
+    console.error(' Error creating admin:', error);
   } finally {
     mongoose.connection.close();
   }

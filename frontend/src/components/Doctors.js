@@ -7,6 +7,7 @@ export default function DoctorDashboard() {
   const [showAppointments, setShowAppointments] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
   const [activeTab, setActiveTab] = useState('Dashboard');
+  const [medicalRecord, setMedicalRecord] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [doctorInfo, setDoctorInfo] = useState(null);
   const [editedInfo, setEditedInfo] = useState(null);
@@ -60,7 +61,8 @@ export default function DoctorDashboard() {
       setExistingPrescriptions([]);
     }
   };
-
+  //++}+}}+}++++++++++++++++++++++++++++++++++}
+  //+}}}}}+++}}}}}}}}}+++++++++++++++++++++++++++++}}}}}+}
   const fetchDoctorProfile = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -134,28 +136,51 @@ export default function DoctorDashboard() {
       console.error('Error fetching appointments:', error);
     }
   };
-
+  //+}}}}}+++}}}}+}}++}}}}++++++++}}++++++}}++++++}}}+++}}+++++++++}+++++++++++++++++++++++++++++++++++++++
+  const fetchMedicalRecord = async (patientId) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`http://localhost:5000/api/doctor/medical-record/${patientId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Fetched medical record:", data);  // تتبع البيانات التي يتم جلبها
+        setMedicalRecord(data);  // تأكد من أن `data` هو مصفوفة
+      } else {
+        console.error('Error fetching medical record');
+      }
+    } catch (error) {
+      console.error('Server error:', error);
+    }
+  };
+  
+  
   const renderDashboard = () => (
     <>
       <div className="row">
+        {/* Rendez-vous du jour */}
         <div className="col-md-6 mb-3">
           <Card>
             <Card.Header>
-              <Calendar className="mr-2" /> Today's Appointments
+              <Calendar className="mr-2" /> Rendez-vous d'aujourd'hui
             </Card.Header>
             <Card.Body>
               <h2>{appointments.length}</h2>
               {appointments.length > 0 ? (
                 <p className="text-muted">
-                  Next: {appointments[0].patientId.firstName} {appointments[0].patientId.lastName} at {appointments[0].time}
+                  Suivant : {appointments[0].patientId.firstName} {appointments[0].patientId.lastName} à {appointments[0].time}
                 </p>
               ) : (
-                <p className="text-muted">No appointments today</p>
+                <p className="text-muted">Aucun rendez-vous aujourd'hui</p>
               )}
             </Card.Body>
             <Card.Footer>
               <Button variant="link" onClick={() => setShowAppointments(!showAppointments)}>
-                {showAppointments ? "Hide" : "View"} Today's Appointments
+                {showAppointments ? "Masquer" : "Voir"} les rendez-vous du jour
                 <ChevronDown className={`ml-2 ${showAppointments ? "rotate-180" : ""}`} />
               </Button>
               {showAppointments && (
@@ -173,13 +198,15 @@ export default function DoctorDashboard() {
                       </div>
                     ))
                   ) : (
-                    <p className="text-muted text-center py-4">No appointments scheduled for today</p>
+                    <p className="text-muted text-center py-4">Aucun rendez-vous prévu pour aujourd'hui</p>
                   )}
                 </div>
               )}
             </Card.Footer>
           </Card>
         </div>
+  
+        {/* Liste des patients */}
         <div className="col-md-6 mb-3">
           <Card>
             <Card.Header>
@@ -187,22 +214,28 @@ export default function DoctorDashboard() {
             </Card.Header>
             <Card.Body>
               <h2>{patients.length}</h2>
-              <p className="text-muted">Total patients under care</p>
+              <p className="text-muted">Total des patients suivis</p>
             </Card.Body>
             <Card.Footer>
               <Button variant="link" onClick={() => setShowPatients(!showPatients)}>
-                {showPatients ? "Hide" : "View All"} Patients
+                {showPatients ? "Masquer" : "Voir tous"} les patients
                 <ChevronDown className={`ml-2 ${showPatients ? "rotate-180" : ""}`} />
               </Button>
               {showPatients && (
                 <div className="mt-3">
                   {patients.map((patient, index) => (
-                    <div key={index} className="py-2 border-top">
+                    <div
+                      key={index}
+                      className="py-2 border-top"
+                      onClick={() => fetchMedicalRecord(patient._id)}  // Quand un patient est cliqué
+                      style={{ cursor: 'pointer', color: 'blue' }}
+                    >
                       <p className="font-weight-medium">
                         {patient.firstName} {patient.lastName}
                       </p>
                       <p className="text-muted">
-                        Last visit: {patient.lastVisit ? new Date(patient.lastVisit).toLocaleDateString() : 'N/A'} | Next: {patient.nextAppointment ? new Date(patient.nextAppointment).toLocaleDateString() : 'N/A'}
+                        Dernière visite : {patient.lastVisit ? new Date(patient.lastVisit).toLocaleDateString() : 'N/A'} |
+                        Prochain rendez-vous : {patient.nextAppointment ? new Date(patient.nextAppointment).toLocaleDateString() : 'N/A'}
                       </p>
                     </div>
                   ))}
@@ -212,44 +245,73 @@ export default function DoctorDashboard() {
           </Card>
         </div>
       </div>
+  
+      {/* Affichage du dossier médical du patient sélectionné */}
+      {Array.isArray(medicalRecord) && medicalRecord.length > 0 && (
+  <div className="mt-5">
+    {medicalRecord.map((record, index) => (
+      <Card key={index} className="mb-3">
+        <Card.Header>
+          <h4>Dossier Médical de {record.patientId.firstName} {record.patientId.lastName}</h4>
+        </Card.Header>
+        <Card.Body>
+          <p><strong>Date :</strong> {new Date(record.date).toLocaleDateString()}</p>
+          <p><strong>Diagnostique :</strong> {record.diagnosis}</p>
+          <p><strong>Notes :</strong> {record.notes}</p>
+          {record.attachment && (
+            <a href={record.attachment} target="_blank" rel="noopener noreferrer">
+              Télécharger le fichier
+            </a>
+          )}
+        </Card.Body>
+      </Card>
+    ))}
+  </div>
+)}
+
+
+  
       <div className="mt-5 row">
+        {/* Activité récente */}
         <div className="col-md-6 mb-3">
           <Card>
-            <Card.Header>Recent Activity</Card.Header>
+            <Card.Header>Activités récentes</Card.Header>
             <Card.Body>
               <ul className="list-unstyled">
                 <li className="d-flex align-items-center mb-2">
                   <Clock className="mr-2" />
-                  Completed appointment with John Doe
+                  Rendez-vous complété avec John Doe
                 </li>
                 <li className="d-flex align-items-center mb-2">
                   <FileText className="mr-2" />
-                  Updated medical records for Alice Johnson
+                  Dossier médical mis à jour pour Alice Johnson
                 </li>
                 <li className="d-flex align-items-center mb-2">
                   <User className="mr-2" />
-                  New patient registered: David Lee
+                  Nouveau patient inscrit : David Lee
                 </li>
               </ul>
             </Card.Body>
           </Card>
         </div>
+  
+        {/* Planning à venir */}
         <div className="col-md-6 mb-3">
           <Card>
-            <Card.Header>Upcoming Schedule</Card.Header>
+            <Card.Header>Planning à venir</Card.Header>
             <Card.Body>
               <ul className="list-unstyled">
                 <li className="d-flex align-items-center mb-2">
                   <Calendar className="mr-2" />
-                  Staff meeting - Tomorrow, 9:00 AM
+                  Réunion du personnel - Demain, 9h00
                 </li>
                 <li className="d-flex align-items-center mb-2">
                   <Stethoscope className="mr-2" />
-                  Cardiology conference - 20th May
+                  Conférence de cardiologie - 20 mai
                 </li>
                 <li className="d-flex align-items-center mb-2">
                   <Clock className="mr-2" />
-                  On-call duty - 22nd May
+                  Garde de nuit - 22 mai
                 </li>
               </ul>
             </Card.Body>
@@ -258,6 +320,8 @@ export default function DoctorDashboard() {
       </div>
     </>
   );
+/////////////////////////  
+  
 
   const renderProfile = () => {
     const handleInputChange = (e) => {

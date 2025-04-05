@@ -1,8 +1,7 @@
-require('dotenv').config(); // تأكد من استخدام المتغيرات البيئية
+require('dotenv').config();   
 const mongoose = require('mongoose');
-const Doctor = require('./models/Doctor'); // تأكد من مسار الملف الصحيح
+const Doctor = require('./models/Doctor'); 
 
-// الاتصال بقاعدة البيانات
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -10,7 +9,6 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Connected to MongoDB'))
 .catch((err) => console.error('Could not connect to MongoDB', err));
 
-// بيانات الأطباء لإضافتها
 const doctors = [
   { firstName: 'Anouar', lastName: 'Laarousse', email: 'anouar.laarousse@example.com', specialty: 'Généraliste', licenseNumber: 'A123456', phoneNumber: '1234567890', password: 'password123' },
   { firstName: 'Nissrine', lastName: 'Eltalbi', email: 'nissrine.eltalbi@example.com', specialty: 'Gynécologue', licenseNumber: 'B123456', phoneNumber: '0987654321', password: 'password123' },
@@ -29,7 +27,6 @@ const doctors = [
   { firstName: 'Amina', lastName: 'Fathi', email: 'amina.fathi@example.com', specialty: 'Dermatologue', licenseNumber: 'O123456', phoneNumber: '1416171819', password: 'password123' }
 ];
 
-// دالة لإضافة الأطباء
 const seedDoctors = async () => {
   try {
     for (let doctorData of doctors) {
@@ -43,5 +40,4 @@ const seedDoctors = async () => {
   }
 };
 
-// تشغيل السكريبت
 seedDoctors();

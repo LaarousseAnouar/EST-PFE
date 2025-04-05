@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Calendar as CalendarIcon, Eye, EyeOff, Hospital } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+import DossierMedical from './DossierMedical';
 const Button = ({ children, variant = 'primary', className = '', ...props }) => (
   <button
     className={`btn btn-primary btn-lg btn-lg  ${
@@ -573,6 +573,17 @@ export default function PatientDashboard() {
               Appointment Booking
             </Button>
           </li>
+          <li>
+            <Button
+              variant={activeTab === 'Dossier Medical' ? "outline" : "ghost"}
+              className={`hover:bg-light hover:text-dark ${activeTab === 'Dossier Medical' ? 'bg-light text-dark' : 'text-dark'}`}
+              onClick={() => setActiveTab('Dossier Medical')}
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Dossier Médical
+            </Button>
+        </li>
+
         </ul>
       </nav>
       <main className="container py-5">
@@ -580,6 +591,7 @@ export default function PatientDashboard() {
         {activeTab === 'Dashboard' && renderDashboard()}
         {activeTab === 'Profile' && renderProfile()}
         {activeTab === 'Appointment Booking' && renderAppointmentBooking()}
+        {activeTab === 'Dossier Medical' && <DossierMedical/>}
       </main>
     </div>
   );

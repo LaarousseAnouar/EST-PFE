@@ -165,7 +165,7 @@ export const doctors = [
     },
     {
         _id: 'doc9',
-        name: 'Dr. Aya kawi',
+        name: 'Dr. Aya laarbi',
         image: doc9,
         speciality: 'Dermatologist',
         degree: 'MBBS',
