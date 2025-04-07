@@ -88,7 +88,39 @@ router.put('/profile', auth, async (req, res) => {
     res.status(500).send({ error: 'Server error' });
   }
 });
+//+}}++++}}}}}}}}}}}}}}}}++}}}+++++++++++++}}}}++++++}++}
+// Route لإضافة طبيب جديد
+router.post('/add', async (req, res) => {
+  const { firstName, lastName, email, specialty, licenseNumber, phoneNumber, password } = req.body;
 
+  try {
+    // التحقق إذا كان الطبيب موجودًا بالفعل باستخدام البريد الإلكتروني أو رقم الترخيص
+    const existingDoctor = await Doctor.findOne({ $or: [{ email }, { licenseNumber }] });
+    if (existingDoctor) {
+      return res.status(400).send({ error: 'Doctor with this email or license number already exists' });
+    }
+
+    // إنشاء طبيب جديد
+    const newDoctor = new Doctor({
+      firstName,
+      lastName,
+      email,
+      specialty,
+      licenseNumber,
+      phoneNumber,
+      password
+    });
+
+    // حفظ الطبيب في قاعدة البيانات
+    await newDoctor.save();
+    res.status(201).json({ message: 'Doctor added successfully', doctor: newDoctor });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Error adding doctor' });
+  }
+});
+
+//+}}++++++++++++++++++++++++++++++++++++++++++++++++++++++}
 router.get('/all', async (req, res) => {
   try {
     const doctors = await Doctor.find().select('firstName lastName specialty');

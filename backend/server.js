@@ -41,3 +41,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Le serveur fonctionne sur le port ${PORT}`);
 });
+// إضافة الـ route الخاص بإضافة الطبيب

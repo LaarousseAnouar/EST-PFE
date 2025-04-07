@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Form, InputGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Hospital, Stethoscope, Activity, DollarSign, UserPlus, ShieldCheck } from 'lucide-react';
-
+import AddDoctor from './AddDoctor';
 export default function AdminDashboard() {
   const [showDoctors, setShowDoctors] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
@@ -20,6 +20,9 @@ export default function AdminDashboard() {
     phoneNumber: '',
     password: ''
   });
+  const handleAddDoctorClick = () => {
+    navigate('/add-doctor');  // التوجيه إلى صفحة AddDoctor
+  };
   const [adminData, setAdminData] = useState({
     firstName: '',
     lastName: '',
@@ -416,8 +419,8 @@ export default function AdminDashboard() {
           </li>
           <li className="nav-item">
             <Button
-              variant={activeTab === 'Add Doctor' ? "outline-primary" : "link"}
-              onClick={() => setActiveTab('Add Doctor')}
+              variant="link"  // إزالة التغيير بالـ activeTab
+              onClick={() => navigate('/add-doctor')}  // استخدام navigate للتوجه إلى صفحة AddDoctor
             >
               <UserPlus className="mr-2" />
               Add Doctor

@@ -17,6 +17,7 @@ import Login from './components/Login.js';
 import Patient from './components/Patient.js';
 import Doctors from './components/Doctors.js';
 import Admins from './components/Admins.js';
+import AddDoctor from './components/AddDoctor.js';  // Importation de la page AddDoctor
 
 // Importation du contexte de l'application
 import AppContextProvider from './Context/AppContext.js';
@@ -43,6 +44,7 @@ function App() {
             <Route path="/patient" element={<Patient />} />
             <Route path="/doctor" element={<Doctors />} />
             <Route path="/admin" element={<Admins />} />
+            <Route path="/add-doctor" element={<AddDoctor />} />  {/* Page AddDoctor */}
 
           </Routes>
         </AppContextProvider>
