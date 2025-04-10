@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const Appointment = require('../models/Appointment');
 const User = require('../models/User');
 const Prescription = require('../models/Prescription');
-const MedicalRecord = require('../models/MedicalRecord');  // تأكد من إضافة هذا السطر
+const MedicalRecord = require('../models/MedicalRecord');  
 
 
 const router = express.Router();
@@ -37,28 +37,24 @@ router.get('/profile', auth, async (req, res) => {
     res.status(500).send({ error: 'Server error' });
   }
 });
-// Route pour récupérer le dossier médical d'un patient
-// مسار لاسترجاع جميع السجلات الطبية للمريض
+
 router.get('/medical-record/:patientId', auth, async (req, res) => {
   try {
     const doctorId = req.user.id;
     const patientId = req.params.patientId;
 
-    // التأكد من وجود الطبيب
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
       return res.status(404).send({ error: 'Médecin non trouvé' });
     }
 
-    // جلب جميع السجلات الطبية للمريض
     const medicalRecords = await MedicalRecord.find({ patientId }).sort({ date: -1 });
 
     if (!medicalRecords || medicalRecords.length === 0) {
       return res.status(404).send({ error: 'Aucun dossier médical trouvé pour ce patient' });
     }
 
-    // إرجاع جميع السجلات الطبية
-    res.json(medicalRecords);  // تأكد من إرجاع مصفوفة
+    res.json(medicalRecords);  
   } catch (error) {
     console.error('Erreur lors de la récupération des dossiers médicaux:', error);
     res.status(500).send({ error: 'Erreur serveur' });
@@ -89,18 +85,16 @@ router.put('/profile', auth, async (req, res) => {
   }
 });
 //+}}++++}}}}}}}}}}}}}}}}++}}}+++++++++++++}}}}++++++}++}
-// Route لإضافة طبيب جديد
 router.post('/add', async (req, res) => {
   const { firstName, lastName, email, specialty, licenseNumber, phoneNumber, password } = req.body;
 
   try {
-    // التحقق إذا كان الطبيب موجودًا بالفعل باستخدام البريد الإلكتروني أو رقم الترخيص
     const existingDoctor = await Doctor.findOne({ $or: [{ email }, { licenseNumber }] });
     if (existingDoctor) {
       return res.status(400).send({ error: 'Doctor with this email or license number already exists' });
     }
 
-    // إنشاء طبيب جديد
+
     const newDoctor = new Doctor({
       firstName,
       lastName,
@@ -111,7 +105,6 @@ router.post('/add', async (req, res) => {
       password
     });
 
-    // حفظ الطبيب في قاعدة البيانات
     await newDoctor.save();
     res.status(201).json({ message: 'Doctor added successfully', doctor: newDoctor });
   } catch (error) {

@@ -65,4 +65,5 @@ function AllDoctors() {
         </section>
     );
 }
+
 export default AllDoctors;

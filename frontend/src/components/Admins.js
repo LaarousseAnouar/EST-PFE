@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Card, Form, InputGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Hospital, Stethoscope, Activity, DollarSign, UserPlus, ShieldCheck } from 'lucide-react';
 import AddDoctor from './AddDoctor';
+import AddAdmin from './AddAdmin';
+
 export default function AdminDashboard() {
   const [showDoctors, setShowDoctors] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
@@ -428,8 +430,8 @@ export default function AdminDashboard() {
           </li>
           <li className="nav-item">
             <Button
-              variant={activeTab === 'Add Admin' ? "outline-primary" : "link"}
-              onClick={() => setActiveTab('Add Admin')}
+              variant="link"  // تغيير هذا الجزء لاستخدام navigate بدلاً من activeTab
+              onClick={() => navigate('/add-admin')}  // التوجيه إلى صفحة AddAdmin
             >
               <ShieldCheck className="mr-2" />
               Add Admin

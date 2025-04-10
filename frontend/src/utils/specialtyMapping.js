@@ -18,6 +18,7 @@ export const specialtyMapping = {
   "picotements": "Neurologue",
 
   // Généraliste
+
   "fièvre": "Généraliste",
   "fievre": "Généraliste",
   "température élevée": "Généraliste",
@@ -36,6 +37,8 @@ export const specialtyMapping = {
   "douleur générale": "Généraliste",
   "perte d'appétit": "Généraliste",
   "faiblesse": "Généraliste",
+  "diabète de type 2": "Généraliste",
+
 
   // Cardiologue
   "douleur thoracique": "Cardiologue",
@@ -103,6 +106,7 @@ export const specialtyMapping = {
   "kyste ovarien": "Gynécologue",
   "endométriose": "Gynécologue",
   "frottis": "Gynécologue",
+
 };
 
 
