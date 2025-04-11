@@ -15,7 +15,7 @@ const AddDoctor = () => {
     firstName: '',
     lastName: '',
     email: '',
-    specialty: '',  // التخصص الذي سيختاره الطبيب
+    specialty: '',
     licenseNumber: '',
     phoneNumber: '',
     password: ''

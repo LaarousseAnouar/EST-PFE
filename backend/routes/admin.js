@@ -1,12 +1,16 @@
 const express = require('express');
 const Doctor = require('../models/Doctor');
 const Admin = require('../models/Admin');
-const jwt = require('jsonwebtoken');
+
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Appointment = require('../models/Appointment');
 
 const router = express.Router();
+
+const jwt = require('jsonwebtoken');
+
+
 
 const auth = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -16,7 +20,7 @@ const auth = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'your_jwt_secret');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {

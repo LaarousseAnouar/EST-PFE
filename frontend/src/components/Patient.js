@@ -3,7 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Calendar as CalendarIcon, Hospital } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DossierMedical from './DossierMedical';
-import { getSpecialtyFromReason } from '../utils/specialtyMapping';
+//import { getSpecialtyFromReason } from '../utils/specialtyMapping';
+import './SignUp.css';
+import "react-toastify/dist/ReactToastify.css";
+
+import { toast, ToastContainer } from "react-toastify";
+
+
 const Button = ({ children, variant = 'primary', className = '', ...props }) => (
   <button
     className={`btn btn-primary btn-lg btn-lg  ${
@@ -94,9 +100,14 @@ export default function PatientDashboard() {
     fetchAppointments();
     fetchCareTeam();
     fetchPrescriptions();
+    fetchSpecialtyFromAI();
   }, []);
 
-  useEffect(() => {
+
+
+
+
+  /*useEffect(() => {
     const specialty = getSpecialtyFromReason(appointmentData.reason);
     if (specialty) {
       const recommended = doctors.filter(doc => doc.specialty === specialty);
@@ -104,7 +115,44 @@ export default function PatientDashboard() {
     } else {
       setFilteredDoctors(doctors);
     }
+  }, [appointmentData.reason, doctors]);*/
+
+
+  const fetchSpecialtyFromAI = async (reason) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/ai/recommander-specialite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ reason }),
+      });
+  
+      const data = await response.json();
+      return data.specialty;
+    } catch (err) {
+      console.error('Erreur IA:', err);
+      return '';
+    }
+  };
+  
+  useEffect(() => {
+    const getSpecialty = async () => {
+      if (appointmentData.reason) {
+        const specialty = await fetchSpecialtyFromAI(appointmentData.reason);
+        if (specialty) {
+          const filtered = doctors.filter(doc => doc.specialty.toLowerCase() === specialty.toLowerCase());
+          setFilteredDoctors(filtered);
+        } else {
+          toast.error("Malheureusement, nous n'avons pas de médecins spécialisés dans votre problème.");
+          navigate('/patient');
+        }
+      }
+    };
+  
+    getSpecialty();
   }, [appointmentData.reason, doctors]);
+  
 
 
   const fetchPatientProfile = async () => {
@@ -334,6 +382,7 @@ export default function PatientDashboard() {
           )}
         </Card>
       </div>
+      <br></br>
       <div className="mt-8 row gx-5 gy-4">
         <Card>
           <CardHeader>
@@ -357,19 +406,6 @@ export default function PatientDashboard() {
           </CardContent>
         </Card>
         <Card>
-          <CardHeader>
-            <CardTitle>Your Care Team</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2">
-              {careTeam.map((member, index) => (
-                <li key={index} className="d-flex align-items-center gap-2">
-                  <Users className="h-4 w-4 text-dark" />
-                  <span>Dr. {member.firstName} {member.lastName} - {member.specialty}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
         </Card>
       </div>
     </>
@@ -512,7 +548,7 @@ export default function PatientDashboard() {
             <div className="space-y-2">
               <Label htmlFor="doctorId">Select Doctor</Label>
               <Select id="doctorId" name="doctorId" value={appointmentData.doctorId} onChange={handleInputChange}>
-                <option value="">Choose a doctor</option>
+               <option value="">Choose a doctor</option>
                 {filteredDoctors.map((doctor) => (
                   <option key={doctor._id} value={doctor._id}>
                     Dr. {doctor.firstName} {doctor.lastName} - {doctor.specialty}
@@ -537,6 +573,7 @@ export default function PatientDashboard() {
               <Label htmlFor="reason">Reason for Visit</Label>
               <Input id="reason" name="reason" value={appointmentData.reason} onChange={handleInputChange} placeholder="Brief description of your concern"/>
             </div>
+            <br></br>
             <Button type="submit" className="ml-auto">Book Appointment</Button>
           </form>
         </CardContent>
@@ -552,7 +589,7 @@ export default function PatientDashboard() {
           <span className="font-bold text-xl">Hospital Management System</span>
         </div>
         <br></br>
-        <Button variant="outline" onClick={() => navigate('/Login.js')}>Sign Out</Button>
+        <Button variant="outline" onClick={() => navigate('/login')}>Sign Out</Button>
       </header>
       <nav className="bg-blue-700 text-dark p-4">
         <ul className="flex space-x-4 justify-center">
@@ -590,6 +627,7 @@ export default function PatientDashboard() {
               Appointment Booking
             </Button>
           </li>
+          <br></br>
           <li>
             <Button
               variant={activeTab === 'Dossier Medical' ? "outline" : "ghost"}
