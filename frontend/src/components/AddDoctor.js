@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Card } from 'react-bootstrap';
 
-// التخصصات التي تم استخراجها من `seedDoctors.js`
 const specialties = [
   "Généraliste",
   "Gynécologue",
@@ -15,7 +14,7 @@ const AddDoctor = () => {
     firstName: '',
     lastName: '',
     email: '',
-    specialty: '',
+    specialty: '',  
     licenseNumber: '',
     phoneNumber: '',
     password: ''
@@ -29,8 +28,7 @@ const AddDoctor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // طباعة البيانات التي سيتم إرسالها
-    console.log("Doctor Data:", doctorData);  // تأكد من أن جميع الحقول موجودة
+    console.log("Doctor Data:", doctorData);  
   
     try {
       const response = await fetch('http://localhost:5000/api/doctor/add', {
@@ -43,7 +41,7 @@ const AddDoctor = () => {
   
       const responseData = await response.json();
       console.log('Response Status:', response.status);
-      console.log('Response Data:', responseData);  // طباعة الاستجابة
+      console.log('Response Data:', responseData);  
   
       if (response.ok) {
         alert('Doctor added successfully');
@@ -106,7 +104,6 @@ const AddDoctor = () => {
               />
             </Form.Group>
 
-            {/* حقل التخصص (ComboBox) مع التخصصات التي تم استخراجها */}
             <Form.Group>
               <Form.Label>Specialty</Form.Label>
               <Form.Control
