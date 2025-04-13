@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-
+import './AddAdmin.css';
 const AddAdmin = ({ onAddAdminSuccess }) => {
   const [newAdminData, setNewAdminData] = useState({
     firstName: '',
