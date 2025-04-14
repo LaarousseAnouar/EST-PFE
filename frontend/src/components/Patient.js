@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, FileText, User, Users, ChevronDown, Home, UserCircle, Calendar as CalendarIcon, Hospital } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import DossierMedical from './DossierMedical';
-import { getSpecialtyFromReason } from '../utils/specialtyMapping';
+//import { getSpecialtyFromReason } from '../utils/specialtyMapping';
 const Button = ({ children, variant = 'primary', className = '', ...props }) => (
   <button
     className={`btn btn-primary btn-lg btn-lg  ${
@@ -68,6 +68,7 @@ const Select = ({ children, ...props }) => (
 );
 
 export default function PatientDashboard() {
+  const [noDoctorFound, setNoDoctorFound] = useState(false);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [showAppointments, setShowAppointments] = useState(false);
   const [showPrescriptions, setShowPrescriptions] = useState(false);
@@ -94,9 +95,11 @@ export default function PatientDashboard() {
     fetchAppointments();
     fetchCareTeam();
     fetchPrescriptions();
+    fetchSpecialtyFromAI();
   }, []);
 
-  useEffect(() => {
+/*
+ useEffect(() => {
     const specialty = getSpecialtyFromReason(appointmentData.reason);
     if (specialty) {
       const recommended = doctors.filter(doc => doc.specialty === specialty);
@@ -105,6 +108,50 @@ export default function PatientDashboard() {
       setFilteredDoctors(doctors);
     }
   }, [appointmentData.reason, doctors]);
+*/
+
+
+const fetchSpecialtyFromAI = async (reason) => {
+  try {
+    const response = await fetch('http://localhost:5000/api/ai/recommander-specialite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ reason }),
+    });
+
+    const data = await response.json();
+    return data.specialty;
+  } catch (err) {
+    console.error('Erreur IA:', err);
+    return '';
+  }
+};
+
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    const getSpecialty = async () => {
+      if (appointmentData.reason) {
+        const specialty = await fetchSpecialtyFromAI(appointmentData.reason);
+        if (specialty) {
+          const filtered = doctors.filter(doc => doc.specialty.toLowerCase() === specialty.toLowerCase());
+          if (filtered.length > 0) {
+            setFilteredDoctors(filtered);
+            setNoDoctorFound(false);
+          } else {
+            setFilteredDoctors([]);
+            setNoDoctorFound(true);
+          }
+        }
+      }
+    };
+    getSpecialty();
+  }, 700); // attend 700ms après que tu écris
+
+  return () => clearTimeout(timeout); // annule si tu continues à écrire
+}, [appointmentData.reason]);
+
 
 
   const fetchPatientProfile = async () => {
@@ -509,17 +556,24 @@ export default function PatientDashboard() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="doctorId">Select Doctor</Label>
-              <Select id="doctorId" name="doctorId" value={appointmentData.doctorId} onChange={handleInputChange}>
-                <option value="">Choose a doctor</option>
-                {filteredDoctors.map((doctor) => (
-                  <option key={doctor._id} value={doctor._id}>
-                    Dr. {doctor.firstName} {doctor.lastName} - {doctor.specialty}
-                  </option>
-                ))}
-              </Select>
-            </div>
+          <div className="space-y-2">
+          <Label htmlFor="doctorId">Select Doctor</Label>
+          <Select id="doctorId" name="doctorId" value={appointmentData.doctorId} onChange={handleInputChange}>
+            <option value="">Choose a doctor</option>
+            {filteredDoctors.map((doctor) => (
+              <option key={doctor._id} value={doctor._id}>
+                Dr. {doctor.firstName} {doctor.lastName} - {doctor.specialty}
+              </option>
+            ))}
+          </Select>
+
+          {noDoctorFound && (
+            <p style={{ color: 'red', marginTop: '0.5rem' }}>
+              Malheureusement, il n'y a pas de médecins spécialisés dans ce symptôme.
+            </p>
+          )}
+          </div>
+
             <div className="space-y-2">
               <Label htmlFor="date">Appointment Date</Label>
               <Input id="date" name="date" type="date" value={appointmentData.date} onChange={handleInputChange}/>
@@ -552,7 +606,7 @@ export default function PatientDashboard() {
           <span className="font-bold text-xl">Hospital Management System</span>
         </div>
         <br></br>
-        <Button variant="outline" onClick={() => navigate('/Login.js')}>Sign Out</Button>
+        <Button variant="outline" onClick={() => navigate('/home')}>Sign Out</Button>
       </header>
       <nav className="bg-blue-700 text-dark p-4">
         <ul className="flex space-x-4 justify-center">

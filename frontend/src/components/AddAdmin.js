@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+
 import './AddAdmin.css';
 const AddAdmin = ({ onAddAdminSuccess }) => {
   const [newAdminData, setNewAdminData] = useState({
@@ -34,9 +35,9 @@ const AddAdmin = ({ onAddAdminSuccess }) => {
   };
 
   return (
-    <div>
+    <div className='add-admin-container'>
       <h3>Add New Admin</h3>
-      <Form>
+      <Form className='form'>
         <Form.Group controlId="firstName">
           <Form.Label>First Name</Form.Label>
           <Form.Control

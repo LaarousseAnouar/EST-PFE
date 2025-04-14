@@ -23,6 +23,8 @@ app.use('/api/login', require('./routes/login'));  // Connexion
 app.use('/api/admin', require('./routes/admin'));  // Administration
 app.use('/api/doctor', require('./routes/doctor'));  // Médecin
 app.use('/api/patient', require('./routes/patient'));  // Patient
+app.use('/api/ai', require('./routes/ai')); // AI
+
 
 // Ajouter les routes pour les dossiers médicaux
 const medicalRecordRoutes = require('./routes/medicalRecord');

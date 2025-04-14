@@ -153,3 +153,16 @@
 .login-link:hover {
     text-decoration: underline;
 }
+
+.space-x-4{
+    display: flex;
+    justify-content: center;
+}
+
+.space-x-4 > li{
+    padding-right: 20px;
+}
+
+.text-xl{
+    font-size: 30px;
+}
